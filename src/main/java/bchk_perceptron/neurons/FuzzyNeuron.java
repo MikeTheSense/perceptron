@@ -10,6 +10,15 @@ public class FuzzyNeuron extends Neuron {
     private double fuzzinessValue;
     //private final AcFunction inverseFunction;
 
+    public double getOutPut() {
+        return outPut;
+    }
+
+    public void setOutPut(double outPut) {
+        this.outPut = outPut;
+    }
+
+    private double outPut;
 
     public FuzzyNeuron(Map<NeuronOperations,Weight> inputSignalsList,
                        AcFunction activationFunction,

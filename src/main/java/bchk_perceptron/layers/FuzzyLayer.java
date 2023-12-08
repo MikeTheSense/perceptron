@@ -90,9 +90,9 @@ public class FuzzyLayer implements LayerOperations {
                 for (Map.Entry<NeuronOperations, Weight> in : neurone.getInputSignalsList().entrySet()) {
                     error += Math.pow(in.getValue().getValue(), fuzzinessValue) *
                             Math.pow(neurone.getSignal() - in.getKey().getSignal(), 2.0);
-                    story.append("Нечеткий нейрон " + neurone.name + " Центр точки " + neurone.getSignal() + " Предыдущий нейрон " + in.getKey().getName() + " Степень принадлежности " + in.getValue().getValue() + "\r\n");
+                    //story.append("Нечеткий нейрон " + neurone.name + " Центр точки " + neurone.getSignal() + " Предыдущий нейрон " + in.getKey().getName() + " Степень принадлежности " + in.getValue().getValue() + "\r\n");
                 }
-                story.append("погрешность = " + error + "\r\n");
+                //story.append("погрешность = " + error + "\r\n");
             }
             if (error <= border || difBorder >= (error - lastError)) {
                 return;
@@ -108,6 +108,22 @@ public class FuzzyLayer implements LayerOperations {
                     }
                     in.getValue().setValue(1.0 / sum);
                 }
+            }
+            for (FuzzyNeuron neurone : neuronsList)
+            {
+                double sum = 0;
+                double sigmaI = 0;
+                double outI = 0;
+                for (FuzzyNeuron neurone1 : neuronsList){
+                    sum += Math.pow(neurone.getSignal() - neurone1.getSignal(),2);
+                }
+                sigmaI = Math.sqrt(1/(neuronsList.size()*sum));
+                for (Map.Entry<NeuronOperations, Weight> in : neurone.getInputSignalsList().entrySet()){
+                    outI = Math.pow(in.getValue().getValue() - neurone.getSignal(),2);
+                    in.getValue().setValue(Math.exp(-outI/(2*sigmaI)));
+                }
+                outI = Math.exp(-outI/(2*sigmaI));
+                neurone.setOutPut(outI);
             }
         }
     }

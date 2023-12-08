@@ -1,7 +1,6 @@
 package bchk_perceptron.ModelTools;
 
-import bchk_perceptron.activationFunctions.InverseReLu;
-import bchk_perceptron.activationFunctions.ReLu;
+import bchk_perceptron.activationFunctions.*;
 import bchk_perceptron.layers.FuzzyLayer;
 import bchk_perceptron.layers.InputLayer;
 import bchk_perceptron.layers.Perceptron;
@@ -38,8 +37,8 @@ public class Model {
         if(pSize == 0) {
             pSize = 15;
         }
-        PerceptronLayer firstLayer = new PerceptronLayer(pSize, new ReLu(), new InverseReLu(), fuzzyLayer, "1");
-        PerceptronLayer secondLayer = new PerceptronLayer(3, new ReLu(), new InverseReLu(), firstLayer, "2");
+        PerceptronLayer firstLayer = new PerceptronLayer(pSize, new Sigmoid(), new InverseSigmoid(), fuzzyLayer, "1");
+        PerceptronLayer secondLayer = new PerceptronLayer(3, new Sigmoid(), new InverseSigmoid(), firstLayer, "2");
         perceptron.addLayer(firstLayer);
         perceptron.addLayer(secondLayer);
 
@@ -118,6 +117,9 @@ public class Model {
             fuzzyLayer.feed();
             double[] res = perceptron.feed();
 
+            double[] res1 = softmax(res);
+
+
             example[(int)bucket[0] - 1] = 1;
 
             double max = -1000000;
@@ -150,5 +152,21 @@ public class Model {
 
 
         return rmse[1];
+    }
+
+    private double[] softmax(double[] x) {
+        double[] expValues = new double[x.length];
+        double expSum = 0;
+
+        for (int i = 0; i < x.length; i++) {
+            expValues[i] = Math.exp(x[i]);
+            expSum += expValues[i];
+        }
+
+        for (int i = 0; i < x.length; i++) {
+            expValues[i] /= expSum;
+        }
+
+        return expValues;
     }
 }

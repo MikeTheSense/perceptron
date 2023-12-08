@@ -152,17 +152,21 @@ public class ModelConfiguration {
         config.setData(data);
         config.setPam(pam);
 
-        config.setTrainSize(124);
-        config.setTestSize(54);
+        config.setFuzzySize(14);
+        config.setPerceptronSize(28);
+
+
+        config.setTrainSize(50);
+        config.setTestSize(128);
         config.setBorder(0.00001);
         config.setDifBorder(0.0001);
 
         double nuDelta = 0.01;
 
 
-        config.setAlpha(0.01);
+        config.setAlpha(0.35);
         config.setEpochs(10);
-        config.setNu(0.3);
+        config.setNu(0.2);
         return config;
     }
 

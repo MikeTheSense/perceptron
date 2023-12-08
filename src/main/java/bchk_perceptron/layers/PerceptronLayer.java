@@ -80,6 +80,11 @@ public class PerceptronLayer implements LayerOperations {
                 neurone.getPrevWights().put(in.getValue(), in.getValue().getValue());
                 reCalculatedWeights.put(in.getKey(), newWeight);
             }
+
+            /*
+
+            Здесь должна быть формула
+            */
             res.put(neurone, reCalculatedWeights);
         }
         return res;
