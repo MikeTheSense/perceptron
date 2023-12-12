@@ -32,15 +32,60 @@ public class Main {
 
     //todo: 1. by Nu -- done 2. by fuzzy neuron -- done  3. by hidden neurons -- done  4. by trainSize 5. epoch -- done
     public static void main(String[] args) throws IOException {
-       // epochTest();
-       // learnSpeedTest();
+         //epochTest();
+       //learnSpeedTest();
         //onetimetest();
         //fuzzyLayerSize();
         //deepNeuroneLayerSize();
-        byTestSize();
+        //byTestSize();
+        //learnSpeedTest2();
+        successful();
 
     }
 
+
+    public static void successful() throws IOException {
+        double[][] myset = DatasetTools.WineSet.readWineData();
+        PreprocessingTools.shuffle(myset, (int) new Date().getTime());
+        PreprocessingTools.normalize(myset, -1, 1);
+
+        List<String> pam = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            pam.add(i, Integer.toString(i + 1));
+        }
+
+
+        //double[] res = {0.0, 0.0};
+
+
+        Model model = new Model();
+        ModelConfiguration mc = ModelConfiguration.prepareConfigurationForFuzzyTest(myset, pam);
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+        List<Double> z = new ArrayList<>();
+        for (int i = 0; i < 1; i ++) {
+            mc.setTestSize(96);
+            mc.setTrainSize(70);
+            mc.setEpochs(150);
+            mc.setFuzzySize(23);
+            mc.setPerceptronSize(14); //4 na 9, 5 na 10, 6 na 12
+            mc.setNu(0.85);
+            Model models = new Model();
+
+            double[] res = {0.0, 0.0};
+            models.createAndExecute(mc, true, res);
+            // x.add((double)i);
+            x.add((double) i);
+            y.add(res[1]);
+            z.add(res[0]);
+        }
+        System.out.println(x.size());
+        System.out.println(y.size());
+        for (int i = 0; i < x.size(); i++) {
+            System.out.println();
+            System.out.println(x.get(i) + " Test Loss " + y.get(i) + " Train loss " + z.get(i));
+        }
+    }
 
     public static void byTestSize() throws IOException {
         double[][] myset = DatasetTools.WineSet.readWineData();
@@ -63,10 +108,13 @@ public class Main {
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
         List<Double> z = new ArrayList<>();
-        for (int i = 10; i < 178; i += 10) {
+        for (int i = 10; i < 178; i += 2) {
             mc.setEpochs(150);
-            mc.setTestSize(178-i);
-            mc.setTrainSize(i);
+            mc.setNu(0.85);
+            mc.setFuzzySize(45);
+            mc.setPerceptronSize(14);
+            mc.setTestSize(i);
+            mc.setTrainSize(178-i);
             Model models = new Model();
 
             double[] res = {0.0, 0.0};
@@ -81,7 +129,7 @@ public class Main {
         for (int i = 0; i < x.size(); i++) {
             System.out.println(x.get(i) + " Test Loss " + y.get(i) + " Train loss " + z.get(i));
         }
-        draw(x, y, "Train size", "Train Loss", "зависимость погрешности классификации от величины тестовой выборки", "TrainSize", "погрешность");
+        draw(x, y, "Test size", "Loss", "зависимость погрешности классификации от величины тестовой выборки", "TrainSize", "погрешность");
     }
 
 
@@ -109,6 +157,10 @@ public class Main {
         List<Double> z = new ArrayList<>();
         for (int i = 1; i < 50; i += 1) {
             mc.setEpochs(150);
+            mc.setNu(0.85);
+            mc.setTrainSize(50);
+            mc.setTestSize(128);
+            mc.setFuzzySize(45);
             mc.setPerceptronSize(i);
             Model models = new Model();
 
@@ -124,7 +176,7 @@ public class Main {
         for (int i = 0; i < x.size(); i++) {
             System.out.println(x.get(i) + " Test Loss " + y.get(i) + " Train loss " + z.get(i));
         }
-        draw(x, y, "DeepNeurons size", "Train Loss", "зависимость погрешности классификации от количества нейронов скрытого слоя", "deepNeuroneSize", "погрешность");
+        draw(x, y, "DeepNeurons size", "Train Loss", "зависимость погрешности обучения и классификации от количества нейронов скрытого слоя", "deepNeuroneSize",x,z, "тестирование","обучение");
     }
 
 
@@ -154,6 +206,9 @@ public class Main {
         List<Double> z = new ArrayList<>();
         for (int i = 1; i < 50; i += 1) {
             mc.setEpochs(150);
+            mc.setNu(0.85);
+            mc.setTrainSize(50);
+            mc.setTestSize(128);
             mc.setFuzzySize(i);
             Model models = new Model();
 
@@ -235,7 +290,9 @@ public class Main {
         List<Double> z = new ArrayList<>();
         for (double i = 0.1; i < 3.1; i += 0.05) {
             // mc.setEpochs(10);
-            mc.setEpochs(50);
+            mc.setEpochs(150);
+            mc.setTrainSize(50);
+            mc.setTestSize(128);
             mc.setNu(i);
             Model models = new Model();
 
@@ -253,6 +310,55 @@ public class Main {
         }
         draw(x, y, "Train Nu Value", "Train Loss", "зависимость погрешности классификации от скорость обучения", "testNu", "погрешность");
     }
+
+    public static void learnSpeedTest2() throws IOException{
+        double[][] myset = DatasetTools.WineSet.readWineData();
+        PreprocessingTools.shuffle(myset, (int) new Date().getTime());
+        PreprocessingTools.normalize(myset, -1, 1);
+
+        List<String> pam = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            pam.add(i, Integer.toString(i + 1));
+        }
+
+
+        //double[] res = {0.0, 0.0};
+
+
+        Model model = new Model();
+        ModelConfiguration mc = ModelConfiguration.prepareConfigurationForFuzzyTest(myset, pam);
+        //model.createAndExecute(mc,false,res );
+
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+        List<Double> z = new ArrayList<>();
+        for (double i = 0.01; i < 2.0; i += 0.01) {
+            // mc.setEpochs(10);
+            mc.setTestSize(89);
+            mc.setTrainSize(89);
+            mc.setEpochs(50);
+            mc.setFuzzySize(7);
+            mc.setPerceptronSize(12); //4 na 9, 5 na 10, 6 na 12
+            mc.setNu(i);
+            Model models = new Model();
+
+            double[] res = {0.0, 0.0};
+            models.createAndExecute(mc, true, res);
+            // x.add((double)i);
+            x.add((double) i);
+            y.add(res[1]);
+            z.add(res[0]);
+        }
+        System.out.println(x.size());
+        System.out.println(y.size());
+        for (int i = 0; i < x.size(); i++) {
+            System.out.println(x.get(i) + " Test Loss " + y.get(i) + " Train loss " + z.get(i));
+        }
+        draw(x, y, "Train Nu Value", "Train Loss", "зависимость погрешности классификации от скорость обучения", "testNu6",x,z, "тестирование","обучение");
+    }
+
+
+
 
 
     public static void epochTest() throws IOException {
@@ -276,9 +382,14 @@ public class Main {
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
         List<Double> z = new ArrayList<>();
-        for (int i = 1; i < 500; i += 50) {
-            // mc.setEpochs(10);
+        for (int i = 10; i < 200; i += 20) {
             mc.setEpochs(i);
+            //mc.setEpochs(150);
+            mc.setNu(0.85);
+            mc.setFuzzySize(45);
+            mc.setPerceptronSize(14);
+            mc.setTestSize(82);
+            mc.setTrainSize(96);
             Model models = new Model();
 
             double[] res = {0.0, 0.0};
@@ -295,7 +406,7 @@ public class Main {
         for (int i = 0; i < x.size(); i++) {
             System.out.println(x.get(i) + " Test Loss " + y.get(i) + " Train loss " + z.get(i));
         }
-        draw(x, y, "Train Epoch Size", "Train Loss", "зависимость погрешности классификации от количества эпох", "testEpoch", "погрешность");
+        draw(x, y, "Train Epoch Size", "Test Loss", "зависимость погрешности классификации от количества эпох", "testEpoch", "погрешность");
     }
 
 

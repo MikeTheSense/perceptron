@@ -102,7 +102,7 @@ public class Model {
             }
 
         }
-        double trainRes = sum / (train.length * secondLayer.getNeurons().size() - 1.0);
+        double trainRes = sum / (train.length * secondLayer.getNeurons().size());
 
         System.out.printf("\nTrain result: %d / %d;", counter, train.length);
 
@@ -143,7 +143,7 @@ public class Model {
             }
         }
 
-        double testRes = sum / (test.length * secondLayer.getNeurons().size() - 1.0);
+        double testRes = sum / (test.length * secondLayer.getNeurons().size());
         System.out.printf("\nTest result: %d / %d;", counter, test.length);
 
         rmse[1] = testRes;

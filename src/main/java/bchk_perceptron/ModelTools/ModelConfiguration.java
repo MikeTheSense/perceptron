@@ -158,8 +158,8 @@ public class ModelConfiguration {
 
         config.setTrainSize(50);
         config.setTestSize(128);
-        config.setBorder(0.00001);
-        config.setDifBorder(0.0001);
+        config.setBorder(0.000001);
+        config.setDifBorder(0.000001);
 
         double nuDelta = 0.01;
 

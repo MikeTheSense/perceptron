@@ -120,7 +120,7 @@ public class FuzzyLayer implements LayerOperations {
                 sigmaI = Math.sqrt(1/(neuronsList.size()*sum));
                 for (Map.Entry<NeuronOperations, Weight> in : neurone.getInputSignalsList().entrySet()){
                     outI = Math.pow(in.getValue().getValue() - neurone.getSignal(),2);
-                    in.getValue().setValue(Math.exp(-outI/(2*sigmaI)));
+                    //in.getValue().setValue(Math.exp(-outI/(2*sigmaI)));
                 }
                 outI = Math.exp(-outI/(2*sigmaI));
                 neurone.setOutPut(outI);
